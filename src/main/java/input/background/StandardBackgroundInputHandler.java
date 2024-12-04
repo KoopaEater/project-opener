@@ -4,10 +4,12 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 public class StandardBackgroundInputHandler implements BackgroundInputHandler {
 
-    OpenCommandListener openCommand;
+    BackgroundCommand openCommand;
+    BackgroundCommand closeCommand;
 
-    public StandardBackgroundInputHandler(OpenCommandListener onOpenCommand) {
+    public StandardBackgroundInputHandler(BackgroundCommand onOpenCommand, BackgroundCommand onCloseCommand) {
         this.openCommand = onOpenCommand;
+        this.closeCommand = onCloseCommand;
     }
 
     private boolean isCtrlShiftPressed(NativeKeyEvent e) {
@@ -16,8 +18,14 @@ public class StandardBackgroundInputHandler implements BackgroundInputHandler {
     }
 
     public void nativeKeyReleased(NativeKeyEvent e) {
+
         if (e.getKeyCode() == NativeKeyEvent.VC_P && isCtrlShiftPressed(e)) {
-            openCommand.onOpenCommand();
+            openCommand.trigger();
         }
+
+        if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+            closeCommand.trigger();
+        }
+
     }
 }

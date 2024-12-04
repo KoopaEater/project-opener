@@ -2,15 +2,13 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 public class StandardSearchUI implements SearchUI {
 
-    private JFrame frame;
-    private JTextField input;
-    private Robot focusRobot;
+    private final JFrame frame;
+    private final JTextField input;
+    private final Robot focusRobot;
 
     public StandardSearchUI() {
 
@@ -22,6 +20,7 @@ public class StandardSearchUI implements SearchUI {
 
 
         frame = new JFrame("Project opener");
+        frame.setUndecorated(true);
 
 
         input = new JTextField(20);
@@ -31,18 +30,21 @@ public class StandardSearchUI implements SearchUI {
         frame.setLocationRelativeTo(null);
         frame.setAlwaysOnTop(true);
 
+        addFocusListener();
+
+    }
+
+    private void addFocusListener() {
 
         // Måske virker det???
         frame.addWindowFocusListener(new WindowAdapter() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
-                super.windowGainedFocus(e);
                 SwingUtilities.invokeLater(() -> {
                     input.requestFocusInWindow();
                 });
             }
         });
-
     }
 
     // Courtesy of "https://namekdev.net/2016/03/regain-focus-once-lost-by-java-swing/"
@@ -61,7 +63,9 @@ public class StandardSearchUI implements SearchUI {
             int oldY = (int) Math.round(oldMouseLocation.getY());
             focusRobot.mouseMove(oldX, oldY);
         }
-        catch (Exception ex) { }
+        catch (Exception ex) {
+            System.err.println("Could not focus window");
+        }
     }
 
     @Override
@@ -73,5 +77,10 @@ public class StandardSearchUI implements SearchUI {
     @Override
     public void hide() {
         frame.setVisible(false);
+    }
+
+    @Override
+    public void reset() {
+        input.setText("");
     }
 }

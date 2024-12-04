@@ -4,6 +4,6 @@ public interface SearchUI {
 
     void show();
     void hide();
-
+    void reset();
 
 }

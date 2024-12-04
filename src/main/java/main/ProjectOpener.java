@@ -16,10 +16,7 @@ public class ProjectOpener {
 
         ui = new StandardSearchUI();
 
-        bgInputHandler = new StandardBackgroundInputHandler(() -> {
-            System.out.println("HEJ!");
-            ui.show();
-        });
+        bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand);
 
         try {
             GlobalScreen.registerNativeHook();
@@ -32,5 +29,14 @@ public class ProjectOpener {
         }
 
         GlobalScreen.addNativeKeyListener(bgInputHandler);
+    }
+
+    private void onOpenCommand() {
+        ui.reset();
+        ui.show();
+    }
+
+    private void onCloseCommand() {
+        ui.hide();
     }
 }
