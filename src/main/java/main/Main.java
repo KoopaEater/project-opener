@@ -8,23 +8,7 @@ import input.background.StandardBackgroundInputHandler;
 public class Main {
 
     public static void main(String[] args) {
-
-        BackgroundInputHandler backgroundInputHandler = new StandardBackgroundInputHandler(() -> {
-            System.out.println("HEJ!");
-        });
-
-        try {
-            GlobalScreen.registerNativeHook();
-        }
-		catch (NativeHookException ex) {
-            System.err.println("There was a problem registering the native hook.");
-            System.err.println(ex.getMessage());
-
-            System.exit(1);
-        }
-
-        GlobalScreen.addNativeKeyListener(backgroundInputHandler);
-
+        new ProjectOpener();
     }
 
 }
