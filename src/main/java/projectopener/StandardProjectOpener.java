@@ -27,7 +27,8 @@ public class StandardProjectOpener {
 
         List<String> projects = fileHandler.getProjectNames();
 
-        goodSearchHandler = new EditDistanceSearchHandler(projects, new LevensteinEditDistanceAlgorithm());
+//        goodSearchHandler = new EditDistanceSearchHandler(projects, new LevenshteinEditDistanceAlgorithm());
+        goodSearchHandler = new SubstringHashedEditDistanceSearchHandler(projects);
         fastSearchHandler = new SortingSearchHandler(projects);
 
         try {
