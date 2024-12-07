@@ -1,6 +1,7 @@
 package ui;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -9,8 +10,11 @@ public class StandardSearchUI implements SearchUI {
     private final JFrame frame;
     private final JTextField input;
     private final Robot focusRobot;
+    private final SearchCommand searchCommand;
 
-    public StandardSearchUI() {
+    public StandardSearchUI(SearchCommand onSearch) {
+
+        this.searchCommand = onSearch;
 
         try {
             focusRobot = new Robot();
@@ -31,6 +35,18 @@ public class StandardSearchUI implements SearchUI {
         frame.setAlwaysOnTop(true);
 
         addFocusListener();
+        addSearchListener();
+
+    }
+
+    private void addSearchListener() {
+
+        input.getDocument().addDocumentListener(new SimpleDocumentListener() {
+            @Override
+            public void update(DocumentEvent e) {
+                searchCommand.trigger(input.getText());
+            }
+        });
 
     }
 

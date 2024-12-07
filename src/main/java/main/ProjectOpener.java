@@ -14,7 +14,7 @@ public class ProjectOpener {
 
     public ProjectOpener() {
 
-        ui = new StandardSearchUI();
+        ui = new StandardSearchUI(this::onSearchCommand);
 
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand);
 
@@ -38,5 +38,8 @@ public class ProjectOpener {
 
     private void onCloseCommand() {
         ui.hide();
+    }
+    private void onSearchCommand(String query) {
+        System.out.println("query = " + query);
     }
 }
