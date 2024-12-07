@@ -1,25 +1,9 @@
 package search;
 
-import org.javatuples.LabelValue;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-public class LevenshteinSearchHandler implements SearchHandler {
+public class LevensteinEditDistanceAlgorithm implements EditDistanceAlgorithm{
     @Override
-    public List<String> findBestMatches(String query, List<String> list) {
-        List<LabelValue<String, Integer>> scores = new ArrayList<>();
-
-        for (String s : list) {
-            int score = lev(query, s);
-            scores.add(new LabelValue<>(s, score));
-        }
-
-        scores.sort(Comparator.comparingInt(LabelValue::getValue));
-
-        return scores.stream().map(score -> score.getLabel()).toList();
+    public int calcDistance(String a, String b) {
+        return lev(a, b);
     }
 
     // With inspiration from https://en.wikipedia.org/wiki/Levenshtein_distance
@@ -44,6 +28,4 @@ public class LevenshteinSearchHandler implements SearchHandler {
     private int minOfThree(int a, int b, int c) {
         return Math.min(Math.min(a, b), c);
     }
-
-
 }

@@ -6,9 +6,7 @@ import file.FileHandler;
 import file.StandardFileHandler;
 import input.background.BackgroundInputHandler;
 import input.background.StandardBackgroundInputHandler;
-import search.ModifiedLevenshteinSearchHandler;
-import search.SearchHandler;
-import search.SortingSearchHandler;
+import search.*;
 import ui.SearchUI;
 import ui.StandardSearchUI;
 
@@ -26,8 +24,11 @@ public class StandardProjectOpener {
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand);
         fileHandler = new StandardFileHandler();
-        goodSearchHandler = new ModifiedLevenshteinSearchHandler();
-        fastSearchHandler = new SortingSearchHandler();
+
+        List<String> projects = fileHandler.getProjectNames();
+
+        goodSearchHandler = new EditDistanceSearchHandler(projects, new LevensteinEditDistanceAlgorithm());
+        fastSearchHandler = new SortingSearchHandler(projects);
 
         try {
             GlobalScreen.registerNativeHook();
@@ -56,8 +57,7 @@ public class StandardProjectOpener {
     }
 
     private List<String> getResultsFromQuery(String query) {
-        List<String> projects = fileHandler.getProjectNames();
         SearchHandler searchHandler = query.isBlank() ? fastSearchHandler : goodSearchHandler;
-        return searchHandler.findBestMatches(query, projects);
+        return searchHandler.findBestMatches(query);
     }
 }
