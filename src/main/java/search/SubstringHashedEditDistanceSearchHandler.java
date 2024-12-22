@@ -5,52 +5,79 @@ import org.javatuples.LabelValue;
 import java.util.*;
 
 public class SubstringHashedEditDistanceSearchHandler implements SearchHandler {
-    private final int MAX_EDIT_DIST = 20;
+    private final int MAX_WORD_LENGTH = 19;
+    private final int MAX_EDIT_DIST = MAX_WORD_LENGTH + 20;
     private final List<String> projectNames;
-    private final Map<String, Set<LabelValue<String, Integer>>[]> substringMap;
+    private final Map<String, Set<String>[]> substringMap;
+
     public SubstringHashedEditDistanceSearchHandler(List<String> projectNames) {
         this.projectNames = projectNames;
         this.substringMap = new HashMap<>();
         preProcess();
-        System.out.println(substringMap);
+        System.out.println("DONE PREPROCESSING");
     }
 
     private void preProcess() {
         for (String projectName : projectNames) {
+            System.out.println("BEGINNING: " + projectName);
             addAllSubstringsToMap(projectName);
+            System.out.println("ENDING: " + projectName);
         }
     }
 
     private void addAllSubstringsToMap(String str) {
-        addAllSubstringsToMap(str, str, 0, new HashSet<>());
-    }
 
-    private void addAllSubstringsToMap(String str, String subStr, int dist, Set<String> alreadyAdded) {
-        if (alreadyAdded.contains(subStr)) return;
+        int wordLengthDiff = str.length() - MAX_WORD_LENGTH;
 
-        if (!substringMap.containsKey(subStr)) {
-            substringMap.put(subStr, getArrayFilledWithSets());
-        }
-        Set<LabelValue<String, Integer>> strs = substringMap.get(subStr)[dist];
-        strs.add(new LabelValue<>(str, dist));
-
-        if (subStr.length() <= 1) {
+        if (wordLengthDiff <= 0) {
+            addAllSubstringsToMap(str, str, 0, 0, new HashSet<>());
             return;
         }
 
-        Set<String> newAlreadyAdded = new HashSet<>(alreadyAdded);
-        newAlreadyAdded.add(subStr);
-
-        for (int i = 0; i < subStr.length(); i++) {
-            StringBuilder sb = new StringBuilder(subStr);
-            sb.deleteCharAt(i);
-            String newSubStr = sb.toString();
-            addAllSubstringsToMap(str, newSubStr, dist + 1, newAlreadyAdded);
+        for (int i = wordLengthDiff; i >= 0; i--) {
+            String subWord = str.substring(i, i+MAX_WORD_LENGTH);
+            System.out.println("BEGINNING SUBWORD: " + subWord);
+            addAllSubstringsToMap(str, subWord, wordLengthDiff, 0, new HashSet<>());
+            System.out.println("ENDING SUBWORD: " + subWord);
         }
+
     }
 
-    private Set<LabelValue<String, Integer>>[] getArrayFilledWithSets() {
-        Set<LabelValue<String, Integer>>[] array = new Set[MAX_EDIT_DIST+1];
+    private void addAllSubstringsToMap(String str, String subStr, int dist, int i, Set<String> alreadyAdded) {
+        // i is the next index to do the algorithm from
+
+        // Check if it has already been done (dynamic programming)
+        if (alreadyAdded.contains(subStr)) {
+            return;
+        } else {
+            alreadyAdded.add(subStr);
+        }
+
+        // Stop if too many edits
+        if (dist > MAX_EDIT_DIST) {
+            return;
+        }
+
+        // Add substring to map
+        Set<String>[] editDistances = substringMap.get(subStr);
+        if (editDistances == null) {
+            Set<String>[] arr = getArrayFilledWithSets();
+            arr[dist].add(str);
+            substringMap.put(subStr, arr);
+        } else {
+            editDistances[dist].add(str);
+        }
+
+        // Find next substring
+        for (int ii = i; ii < subStr.length(); ii++) {
+            String newSubStr = subStr.substring(0, ii) + subStr.substring(ii+1);
+            addAllSubstringsToMap(str, newSubStr, dist + 1, ii, alreadyAdded);
+        }
+
+    }
+
+    private Set<String>[] getArrayFilledWithSets() {
+        Set<String>[] array = new Set[MAX_EDIT_DIST+1];
         for (int i = 0; i < array.length; i++) {
             array[i] = new HashSet<>();
         }
