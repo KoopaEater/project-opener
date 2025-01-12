@@ -1,6 +1,7 @@
 package search;
 
 import org.javatuples.LabelValue;
+import project.Project;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,17 +15,19 @@ public class EditDistanceSearchHandler implements SearchHandler {
         this.algorithm = algorithm;
     }
     @Override
-    public List<String> findBestMatches(String query) {
-        List<LabelValue<String, Integer>> scores = new ArrayList<>();
+    public List<Project> findBestMatches(String query) {
+//        List<LabelValue<String, Integer>> scores = new ArrayList<>();
+//
+//        for (String s : projectNames) {
+//            int score = algorithm.calcDistance(query, s);
+//            scores.add(new LabelValue<>(s, score));
+//        }
+//
+//        scores.sort(Comparator.comparingInt(LabelValue::getValue));
+//
+//        return scores.stream().map(score -> score.getLabel()).toList();
 
-        for (String s : projectNames) {
-            int score = algorithm.calcDistance(query, s);
-            scores.add(new LabelValue<>(s, score));
-        }
-
-        scores.sort(Comparator.comparingInt(LabelValue::getValue));
-
-        return scores.stream().map(score -> score.getLabel()).toList();
+        return List.of();
     }
 
 }

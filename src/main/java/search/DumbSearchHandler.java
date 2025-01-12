@@ -1,14 +1,16 @@
 package search;
 
+import project.Project;
+
 import java.util.List;
 
 public class DumbSearchHandler implements SearchHandler {
-    private final List<String> projectNames;
-    public DumbSearchHandler(List<String> projectNames) {
-        this.projectNames = projectNames;
+    private final List<Project> projects;
+    public DumbSearchHandler(List<Project> projects) {
+        this.projects = projects;
     }
     @Override
-    public List<String> findBestMatches(String query) {
-        return projectNames;
+    public List<Project> findBestMatches(String query) {
+        return projects;
     }
 }

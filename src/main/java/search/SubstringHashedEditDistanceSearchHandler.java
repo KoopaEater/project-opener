@@ -1,6 +1,7 @@
 package search;
 
 import org.javatuples.LabelValue;
+import project.Project;
 
 import java.util.*;
 
@@ -85,7 +86,7 @@ public class SubstringHashedEditDistanceSearchHandler implements SearchHandler {
     }
 
     @Override
-    public List<String> findBestMatches(String query) {
+    public List<Project> findBestMatches(String query) {
         return null;
     }
 }

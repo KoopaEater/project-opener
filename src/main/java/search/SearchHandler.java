@@ -1,7 +1,9 @@
 package search;
 
+import project.Project;
+
 import java.util.List;
 
 public interface SearchHandler {
-    List<String> findBestMatches(String query);
+    List<Project> findBestMatches(String query);
 }

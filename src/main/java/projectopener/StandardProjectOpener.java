@@ -6,6 +6,9 @@ import file.FileHandler;
 import file.StandardFileHandler;
 import input.background.BackgroundInputHandler;
 import input.background.StandardBackgroundInputHandler;
+import project.Project;
+import project.ProjectFactory;
+import project.VSCodeProjectFactory;
 import search.*;
 import ui.SearchUI;
 import ui.StandardSearchUI;
@@ -18,17 +21,22 @@ public class StandardProjectOpener {
     private final SearchUI ui;
     private final FileHandler fileHandler;
     private final SearchHandler goodSearchHandler, fastSearchHandler;
+    private final ProjectFactory projectFactory;
 
     public StandardProjectOpener() {
 
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand);
         fileHandler = new StandardFileHandler();
+        projectFactory = new VSCodeProjectFactory();
 
-        List<String> projects = fileHandler.getProjectNames();
+        List<String> projectNames = fileHandler.getProjectNames();
+        List<Project> projects = projectFactory.createProjects(projectNames);
+
+        System.out.println(projects);
 
 //        goodSearchHandler = new EditDistanceSearchHandler(projects, new LevenshteinEditDistanceAlgorithm());
-        goodSearchHandler = new SubstringHashedEditDistanceSearchHandler(projects);
+        goodSearchHandler = new ExactSubstringSearchHandler(projects);
         fastSearchHandler = new SortingSearchHandler(projects);
 
         try {
@@ -53,11 +61,11 @@ public class StandardProjectOpener {
     }
     private void onSearchCommand(String query) {
         System.out.println("QUERY = " + query);
-        List<String> results = getResultsFromQuery(query);
+        List<Project> results = getResultsFromQuery(query);
         System.out.println(results);
     }
 
-    private List<String> getResultsFromQuery(String query) {
+    private List<Project> getResultsFromQuery(String query) {
         SearchHandler searchHandler = query.isBlank() ? fastSearchHandler : goodSearchHandler;
         return searchHandler.findBestMatches(query);
     }

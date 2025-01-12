@@ -11,7 +11,7 @@ public class StandardFileHandler implements FileHandler {
     private File[] files;
 
     public StandardFileHandler() {
-        this.path = "E:\\Programmering\\Hjemmesider";
+        this.path = "C:\\Users\\maxka\\Projects";
         reloadFiles();
     }
 
