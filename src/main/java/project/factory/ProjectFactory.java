@@ -1,4 +1,6 @@
-package project;
+package project.factory;
+
+import project.Project;
 
 import java.util.List;
 

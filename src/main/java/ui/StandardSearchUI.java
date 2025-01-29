@@ -40,6 +40,7 @@ public class StandardSearchUI implements SearchUI {
         searchPanel.add(input);
 
         searchList = new JList<Project>();
+        searchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         searchPanel.add(searchList);
 
         frame.pack();

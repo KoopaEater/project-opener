@@ -1,4 +1,8 @@
-package project;
+package project.factory;
+
+import project.Project;
+import project.ProjectType;
+import project.StandardProject;
 
 import java.util.ArrayList;
 import java.util.List;

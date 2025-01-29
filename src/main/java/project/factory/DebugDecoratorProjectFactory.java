@@ -1,8 +1,10 @@
-package project;
+package project.factory;
+
+import project.DebugDecoratorProject;
+import project.Project;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DebugDecoratorProjectFactory implements ProjectFactory {
     private final ProjectFactory projectFactory;
