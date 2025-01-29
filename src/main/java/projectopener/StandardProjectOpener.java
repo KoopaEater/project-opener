@@ -7,6 +7,7 @@ import file.OnlyDirectoriesFileFilter;
 import file.StandardFileHandler;
 import input.background.BackgroundInputHandler;
 import input.background.StandardBackgroundInputHandler;
+import project.DebugDecoratorProjectFactory;
 import project.Project;
 import project.ProjectFactory;
 import project.VSCodeProjectFactory;
@@ -29,7 +30,8 @@ public class StandardProjectOpener {
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand);
         fileHandler = new StandardFileHandler("C:\\Users\\maxka\\Projects", new OnlyDirectoriesFileFilter());
-        projectFactory = new VSCodeProjectFactory();
+//        projectFactory = new VSCodeProjectFactory();
+        projectFactory = new DebugDecoratorProjectFactory(new VSCodeProjectFactory());
 
         List<String> projectNames = fileHandler.getProjectNames();
         List<Project> projects = projectFactory.createProjects(projectNames);
@@ -63,6 +65,7 @@ public class StandardProjectOpener {
     private void onSearchCommand(String query) {
         System.out.println("QUERY = " + query);
         List<Project> results = getResultsFromQuery(query);
+        ui.setSearchList(results.toArray(new Project[0]));
         System.out.println(results);
     }
 

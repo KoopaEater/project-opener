@@ -1,8 +1,8 @@
 package project;
 
 public class StandardProject implements Project{
-    private String name;
-    private ProjectType type;
+    private final String name;
+    private final ProjectType type;
     public StandardProject(String name, ProjectType type) {
         this.name = name;
         this.type = type;
@@ -19,6 +19,6 @@ public class StandardProject implements Project{
 
     @Override
     public String toString() {
-        return name + "|" + type;
+        return getName();
     }
 }

@@ -1,5 +1,7 @@
 package ui;
 
+import project.Project;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -9,6 +11,7 @@ public class StandardSearchUI implements SearchUI {
 
     private final JFrame frame;
     private final JTextField input;
+    private final JList<Project> searchList;
     private final Robot focusRobot;
     private final SearchCommand searchCommand;
 
@@ -26,9 +29,18 @@ public class StandardSearchUI implements SearchUI {
         frame = new JFrame("Project opener");
         frame.setUndecorated(true);
 
+        Container contentPane = frame.getContentPane();
+        contentPane.setLayout(new BorderLayout());
+
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+        contentPane.add(searchPanel, BorderLayout.CENTER);
 
         input = new JTextField(20);
-        frame.add(input);
+        searchPanel.add(input);
+
+        searchList = new JList<Project>();
+        searchPanel.add(searchList);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -56,9 +68,7 @@ public class StandardSearchUI implements SearchUI {
         frame.addWindowFocusListener(new WindowAdapter() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
-                SwingUtilities.invokeLater(() -> {
-                    input.requestFocusInWindow();
-                });
+                SwingUtilities.invokeLater(input::requestFocusInWindow);
             }
         });
     }
@@ -98,5 +108,11 @@ public class StandardSearchUI implements SearchUI {
     @Override
     public void reset() {
         input.setText("");
+    }
+
+    @Override
+    public void setSearchList(Project[] projects) {
+        searchList.setListData(projects);
+        frame.pack();
     }
 }
