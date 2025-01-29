@@ -8,17 +8,19 @@ import java.util.List;
 public class StandardFileHandler implements FileHandler {
 
     private final String path;
+    private final FileFilter filter;
     private File[] files;
 
-    public StandardFileHandler() {
-        this.path = "C:\\Users\\maxka\\Projects";
+    public StandardFileHandler(String path, FileFilter filter) {
+        this.path = path;
+        this.filter = filter;
         reloadFiles();
     }
 
 
     @Override
     public List<String> getProjectNames() {
-        return Arrays.stream(files).parallel().map(f -> f.getName()).toList();
+        return Arrays.stream(files).parallel().filter(filter::filter).map(File::getName).toList();
     }
 
     @Override

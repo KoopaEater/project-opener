@@ -3,6 +3,7 @@ package projectopener;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import file.FileHandler;
+import file.OnlyDirectoriesFileFilter;
 import file.StandardFileHandler;
 import input.background.BackgroundInputHandler;
 import input.background.StandardBackgroundInputHandler;
@@ -27,7 +28,7 @@ public class StandardProjectOpener {
 
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand);
-        fileHandler = new StandardFileHandler();
+        fileHandler = new StandardFileHandler("C:\\Users\\maxka\\Projects", new OnlyDirectoriesFileFilter());
         projectFactory = new VSCodeProjectFactory();
 
         List<String> projectNames = fileHandler.getProjectNames();
