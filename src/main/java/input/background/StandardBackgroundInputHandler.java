@@ -4,12 +4,14 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 public class StandardBackgroundInputHandler implements BackgroundInputHandler {
 
-    BackgroundCommand openCommand;
-    BackgroundCommand closeCommand;
+    BackgroundCommand openCommand, closeCommand, onConfirmSearchCommand, onUpCommand, onDownCommand;
 
-    public StandardBackgroundInputHandler(BackgroundCommand onOpenCommand, BackgroundCommand onCloseCommand) {
+    public StandardBackgroundInputHandler(BackgroundCommand onOpenCommand, BackgroundCommand onCloseCommand, BackgroundCommand onConfirmSearchCommand, BackgroundCommand onUpCommand, BackgroundCommand onDownCommand) {
         this.openCommand = onOpenCommand;
         this.closeCommand = onCloseCommand;
+        this.onConfirmSearchCommand = onConfirmSearchCommand;
+        this.onUpCommand = onUpCommand;
+        this.onDownCommand = onDownCommand;
     }
 
     private boolean isCtrlShiftPressed(NativeKeyEvent e) {
@@ -22,10 +24,22 @@ public class StandardBackgroundInputHandler implements BackgroundInputHandler {
         if (e.getKeyCode() == NativeKeyEvent.VC_P && isCtrlShiftPressed(e)) {
             openCommand.trigger();
         }
-
         if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
             closeCommand.trigger();
         }
+        if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) {
+            onConfirmSearchCommand.trigger();
+        }
 
     }
+
+    public void nativeKeyPressed(NativeKeyEvent e) {
+        if (e.getKeyCode() == NativeKeyEvent.VC_UP) {
+            onUpCommand.trigger();
+        }
+        if (e.getKeyCode() == NativeKeyEvent.VC_DOWN) {
+            onDownCommand.trigger();
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package projectopener;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import file.FileHandler;
 import file.OnlyDirectoriesFileFilter;
 import file.StandardFileHandler;
@@ -28,7 +29,7 @@ public class StandardProjectOpener {
     public StandardProjectOpener() {
 
         ui = new StandardSearchUI(this::onSearchCommand);
-        bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand);
+        bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand, this::onConfirmSearchCommand, this::onUpCommand, this::onDownCommand);
         fileHandler = new StandardFileHandler("C:\\Users\\maxka\\Projects", new OnlyDirectoriesFileFilter());
 //        projectFactory = new VSCodeProjectFactory();
         projectFactory = new DebugDecoratorProjectFactory(new VSCodeProjectFactory());
@@ -55,18 +56,38 @@ public class StandardProjectOpener {
         GlobalScreen.addNativeKeyListener(bgInputHandler);
     }
 
+    private void onUpCommand() {
+        if (ui.isShown()) {
+            ui.selectPreviousProject();
+        }
+    }
+    private void onDownCommand() {
+        if (ui.isShown()) {
+            ui.selectNextProject();
+        }
+    }
+    private void onConfirmSearchCommand() {
+        if (ui.isShown()) {
+            ui.hide();
+            System.out.println(ui.getSelectedProject());
+            ui.reset();
+        }
+    }
     private void onOpenCommand() {
         ui.reset();
+        setSearchListFromQuery("");
         ui.show();
     }
     private void onCloseCommand() {
         ui.hide();
     }
     private void onSearchCommand(String query) {
-        System.out.println("QUERY = " + query);
+        setSearchListFromQuery(query);
+    }
+    private void setSearchListFromQuery(String query) {
         List<Project> results = getResultsFromQuery(query);
-        ui.setSearchList(results.toArray(new Project[0]));
-        System.out.println(results);
+        ui.setSearchList(results);
+        ui.setSearchIndex(0);
     }
 
     private List<Project> getResultsFromQuery(String query) {

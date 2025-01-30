@@ -41,6 +41,7 @@ public class StandardSearchUI implements SearchUI {
 
         searchList = new JList<Project>();
         searchList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        searchList.setEnabled(false);
         searchPanel.add(searchList);
 
         frame.pack();
@@ -98,6 +99,7 @@ public class StandardSearchUI implements SearchUI {
     @Override
     public void show() {
         frame.setVisible(true);
+        frame.pack();
         focusWindow();
     }
 
@@ -109,11 +111,39 @@ public class StandardSearchUI implements SearchUI {
     @Override
     public void reset() {
         input.setText("");
+        searchList.setListData(new Project[0]);
     }
 
     @Override
-    public void setSearchList(Project[] projects) {
-        searchList.setListData(projects);
+    public boolean isShown() {
+        return frame.isVisible();
+    }
+
+    @Override
+    public void setSearchList(java.util.List<Project> projects) {
+        searchList.setListData(projects.toArray(new Project[0]));
         frame.pack();
+    }
+
+    @Override
+    public void setSearchIndex(int index) {
+        searchList.setSelectedIndex(index);
+    }
+
+    @Override
+    public void selectNextProject() {
+        int current = searchList.getSelectedIndex();
+        searchList.setSelectedIndex(current + 1);
+    }
+
+    @Override
+    public void selectPreviousProject() {
+        int current = searchList.getSelectedIndex();
+        searchList.setSelectedIndex(current - 1);
+    }
+
+    @Override
+    public Project getSelectedProject() {
+        return searchList.getSelectedValue();
     }
 }
