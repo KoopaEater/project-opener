@@ -31,8 +31,8 @@ public class StandardProjectOpener {
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand, this::onConfirmSearchCommand, this::onUpCommand, this::onDownCommand);
         fileHandler = new StandardFileHandler("C:\\Users\\maxka\\Projects", new OnlyDirectoriesFileFilter());
-//        projectFactory = new VSCodeProjectFactory();
-        projectFactory = new DebugDecoratorProjectFactory(new VSCodeProjectFactory());
+        projectFactory = new VSCodeProjectFactory();
+//        projectFactory = new DebugDecoratorProjectFactory(new VSCodeProjectFactory());
 
         List<String> projectNames = fileHandler.getProjectNames();
         List<Project> projects = projectFactory.createProjects(projectNames);
@@ -56,16 +56,19 @@ public class StandardProjectOpener {
         GlobalScreen.addNativeKeyListener(bgInputHandler);
     }
 
+
     private void onUpCommand() {
         if (ui.isShown()) {
             ui.selectPreviousProject();
         }
     }
+
     private void onDownCommand() {
         if (ui.isShown()) {
             ui.selectNextProject();
         }
     }
+
     private void onConfirmSearchCommand() {
         if (ui.isShown()) {
             ui.hide();
@@ -73,22 +76,27 @@ public class StandardProjectOpener {
             ui.reset();
         }
     }
+
     private void onOpenCommand() {
         ui.reset();
         setSearchListFromQuery("");
         ui.show();
     }
+
     private void onCloseCommand() {
         ui.hide();
     }
+
     private void onSearchCommand(String query) {
         setSearchListFromQuery(query);
     }
+
     private void setSearchListFromQuery(String query) {
         List<Project> results = getResultsFromQuery(query);
         ui.setSearchList(results);
         ui.setSearchIndex(0);
     }
+
 
     private List<Project> getResultsFromQuery(String query) {
         SearchHandler searchHandler = query.isBlank() ? fastSearchHandler : goodSearchHandler;

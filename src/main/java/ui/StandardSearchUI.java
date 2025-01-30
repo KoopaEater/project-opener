@@ -28,12 +28,14 @@ public class StandardSearchUI implements SearchUI {
 
         frame = new JFrame("Project opener");
         frame.setUndecorated(true);
+        frame.setBackground(new Color(0,0,0,0));
 
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
 
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+        searchPanel.setBackground(new Color(0,0,0,0));
         contentPane.add(searchPanel, BorderLayout.CENTER);
 
         input = new JTextField(20);

@@ -4,7 +4,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 public class StandardBackgroundInputHandler implements BackgroundInputHandler {
 
-    BackgroundCommand openCommand, closeCommand, onConfirmSearchCommand, onUpCommand, onDownCommand;
+    BackgroundCommand openCommand, closeCommand, onConfirmSearchCommand, onUpCommand, onDownCommand, onDeleteSearchCommand;
 
     public StandardBackgroundInputHandler(BackgroundCommand onOpenCommand, BackgroundCommand onCloseCommand, BackgroundCommand onConfirmSearchCommand, BackgroundCommand onUpCommand, BackgroundCommand onDownCommand) {
         this.openCommand = onOpenCommand;
@@ -20,20 +20,18 @@ public class StandardBackgroundInputHandler implements BackgroundInputHandler {
     }
 
     public void nativeKeyReleased(NativeKeyEvent e) {
-
-        if (e.getKeyCode() == NativeKeyEvent.VC_P && isCtrlShiftPressed(e)) {
-            openCommand.trigger();
-        }
         if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
             closeCommand.trigger();
         }
         if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) {
             onConfirmSearchCommand.trigger();
         }
-
     }
 
     public void nativeKeyPressed(NativeKeyEvent e) {
+        if (e.getKeyCode() == NativeKeyEvent.VC_P && isCtrlShiftPressed(e)) {
+            openCommand.trigger();
+        }
         if (e.getKeyCode() == NativeKeyEvent.VC_UP) {
             onUpCommand.trigger();
         }
