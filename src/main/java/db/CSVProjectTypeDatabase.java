@@ -36,7 +36,7 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
             while ((line = br.readLine()) != null) {
                 String[] cells = line.split(",");
                 String projectName = cells[0];
-                ProjectType projectType = ProjectType.fromString(cells[1].toLowerCase());
+                ProjectType projectType = ProjectType.fromString(cells[1]);
                 typeMap.put(projectName, projectType);
             }
         } catch (IOException e) {
@@ -50,6 +50,6 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
 
     @Override
     public ProjectType get(String projectName) {
-        return null;
+        return typeMap.getOrDefault(projectName, ProjectType.UNKNOWN);
     }
 }

@@ -11,7 +11,7 @@ public enum ProjectType {
     }
     public String getCommand() {return command;}
     public static ProjectType fromString(String type) {
-        switch (type) {
+        switch (type.toLowerCase()) {
             case "vscode":
                 return ProjectType.VSCODE;
             case "intellij":

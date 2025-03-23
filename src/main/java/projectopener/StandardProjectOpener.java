@@ -13,6 +13,8 @@ import input.background.BackgroundInputHandler;
 import input.background.StandardBackgroundInputHandler;
 import project.Project;
 import project.ProjectType;
+import project.factory.DBProjectFactory;
+import project.factory.DebugDecoratorProjectFactory;
 import project.factory.ProjectFactory;
 import project.factory.OneTypeProjectFactory;
 import search.*;
@@ -37,10 +39,9 @@ public class StandardProjectOpener {
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand, this::onConfirmSearchCommand, this::onUpCommand, this::onDownCommand);
         fileHandler = new StandardFileHandler(path, new OnlyDirectoriesFileFilter());
-        projectFactory = new OneTypeProjectFactory(ProjectType.INTELLIJ);
-//        projectFactory = new DebugDecoratorProjectFactory(new VSCodeProjectFactory());
         projectInitiator = new TypeBasedProjectInitiator(path);
         projectTypeDatabase = new CSVProjectTypeDatabase(path);
+        projectFactory = new DebugDecoratorProjectFactory(new DBProjectFactory(projectTypeDatabase));
 
         List<String> projectNames = fileHandler.getProjectNames();
         List<Project> projects = projectFactory.createProjects(projectNames);
