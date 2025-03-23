@@ -11,13 +11,10 @@ public enum ProjectType {
     }
     public String getCommand() {return command;}
     public static ProjectType fromString(String type) {
-        switch (type.toLowerCase()) {
-            case "vscode":
-                return ProjectType.VSCODE;
-            case "intellij":
-                return ProjectType.INTELLIJ;
-            default:
-                return ProjectType.UNKNOWN;
-        }
+        return switch (type.toLowerCase()) {
+            case "vscode" -> ProjectType.VSCODE;
+            case "intellij" -> ProjectType.INTELLIJ;
+            default -> ProjectType.UNKNOWN;
+        };
     }
 }
