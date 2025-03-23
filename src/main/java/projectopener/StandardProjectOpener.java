@@ -2,6 +2,8 @@ package projectopener;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
+import db.CSVProjectTypeDatabase;
+import db.ProjectTypeDatabase;
 import file.FileHandler;
 import file.OnlyDirectoriesFileFilter;
 import file.StandardFileHandler;
@@ -27,6 +29,7 @@ public class StandardProjectOpener {
     private final SearchHandler goodSearchHandler, fastSearchHandler;
     private final ProjectFactory projectFactory;
     private final ProjectInitiator projectInitiator;
+    private final ProjectTypeDatabase projectTypeDatabase;
 
     public StandardProjectOpener() {
 
@@ -37,6 +40,7 @@ public class StandardProjectOpener {
         projectFactory = new OneTypeProjectFactory(ProjectType.INTELLIJ);
 //        projectFactory = new DebugDecoratorProjectFactory(new VSCodeProjectFactory());
         projectInitiator = new TypeBasedProjectInitiator(path);
+        projectTypeDatabase = new CSVProjectTypeDatabase(path);
 
         List<String> projectNames = fileHandler.getProjectNames();
         List<Project> projects = projectFactory.createProjects(projectNames);
