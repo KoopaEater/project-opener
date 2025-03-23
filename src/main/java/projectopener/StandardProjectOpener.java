@@ -18,6 +18,8 @@ import project.factory.DebugDecoratorProjectFactory;
 import project.factory.ProjectFactory;
 import project.factory.OneTypeProjectFactory;
 import search.*;
+import ui.DropdownProjectTypeDialog;
+import ui.ProjectTypeDialog;
 import ui.SearchUI;
 import ui.StandardSearchUI;
 
@@ -32,6 +34,7 @@ public class StandardProjectOpener {
     private final ProjectFactory projectFactory;
     private final ProjectInitiator projectInitiator;
     private final ProjectTypeDatabase projectTypeDatabase;
+    private final ProjectTypeDialog projectTypeDialog;
 
     public StandardProjectOpener() {
 
@@ -42,6 +45,7 @@ public class StandardProjectOpener {
         projectInitiator = new TypeBasedProjectInitiator(path);
         projectTypeDatabase = new CSVProjectTypeDatabase(path);
         projectFactory = new DebugDecoratorProjectFactory(new DBProjectFactory(projectTypeDatabase));
+        projectTypeDialog = new DropdownProjectTypeDialog();
 
         List<String> projectNames = fileHandler.getProjectNames();
         List<Project> projects = projectFactory.createProjects(projectNames);
@@ -81,8 +85,9 @@ public class StandardProjectOpener {
     private void onConfirmSearchCommand() {
         if (ui.isShown()) {
             ui.hide();
-            System.out.println(ui.getSelectedProject());
-            projectInitiator.openProject(ui.getSelectedProject());
+            Project selectedProject = ui.getSelectedProject();
+            System.out.println(selectedProject);
+            projectInitiator.openProject(selectedProject);
             ui.reset();
         }
     }
