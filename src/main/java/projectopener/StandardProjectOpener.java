@@ -6,6 +6,8 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import file.FileHandler;
 import file.OnlyDirectoriesFileFilter;
 import file.StandardFileHandler;
+import initiator.ProjectInitiator;
+import initiator.TypeBasedProjectInitiator;
 import input.background.BackgroundInputHandler;
 import input.background.StandardBackgroundInputHandler;
 import project.factory.DebugDecoratorProjectFactory;
@@ -25,14 +27,17 @@ public class StandardProjectOpener {
     private final FileHandler fileHandler;
     private final SearchHandler goodSearchHandler, fastSearchHandler;
     private final ProjectFactory projectFactory;
+    private final ProjectInitiator projectInitiator;
 
     public StandardProjectOpener() {
 
+        String path = "C:\\Users\\maxka\\Projects\\";
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand, this::onConfirmSearchCommand, this::onUpCommand, this::onDownCommand);
-        fileHandler = new StandardFileHandler("C:\\Users\\maxka\\Projects", new OnlyDirectoriesFileFilter());
+        fileHandler = new StandardFileHandler(path, new OnlyDirectoriesFileFilter());
         projectFactory = new VSCodeProjectFactory();
 //        projectFactory = new DebugDecoratorProjectFactory(new VSCodeProjectFactory());
+        projectInitiator = new TypeBasedProjectInitiator(path);
 
         List<String> projectNames = fileHandler.getProjectNames();
         List<Project> projects = projectFactory.createProjects(projectNames);
@@ -73,6 +78,7 @@ public class StandardProjectOpener {
         if (ui.isShown()) {
             ui.hide();
             System.out.println(ui.getSelectedProject());
+            projectInitiator.openProject(ui.getSelectedProject());
             ui.reset();
         }
     }
