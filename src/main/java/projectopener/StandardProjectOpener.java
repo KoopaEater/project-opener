@@ -2,7 +2,6 @@ package projectopener;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import file.FileHandler;
 import file.OnlyDirectoriesFileFilter;
 import file.StandardFileHandler;
@@ -10,10 +9,10 @@ import initiator.ProjectInitiator;
 import initiator.TypeBasedProjectInitiator;
 import input.background.BackgroundInputHandler;
 import input.background.StandardBackgroundInputHandler;
-import project.factory.DebugDecoratorProjectFactory;
 import project.Project;
+import project.ProjectType;
 import project.factory.ProjectFactory;
-import project.factory.VSCodeProjectFactory;
+import project.factory.OneTypeProjectFactory;
 import search.*;
 import ui.SearchUI;
 import ui.StandardSearchUI;
@@ -35,7 +34,7 @@ public class StandardProjectOpener {
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand, this::onConfirmSearchCommand, this::onUpCommand, this::onDownCommand);
         fileHandler = new StandardFileHandler(path, new OnlyDirectoriesFileFilter());
-        projectFactory = new VSCodeProjectFactory();
+        projectFactory = new OneTypeProjectFactory(ProjectType.INTELLIJ);
 //        projectFactory = new DebugDecoratorProjectFactory(new VSCodeProjectFactory());
         projectInitiator = new TypeBasedProjectInitiator(path);
 
