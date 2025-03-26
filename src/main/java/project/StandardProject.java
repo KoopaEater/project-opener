@@ -2,7 +2,7 @@ package project;
 
 public class StandardProject implements Project{
     private final String name;
-    private final ProjectType type;
+    private ProjectType type;
     public StandardProject(String name, ProjectType type) {
         this.name = name;
         this.type = type;
@@ -15,6 +15,11 @@ public class StandardProject implements Project{
     @Override
     public ProjectType getType() {
         return type;
+    }
+
+    @Override
+    public void setType(ProjectType type) {
+        this.type = type;
     }
 
     @Override

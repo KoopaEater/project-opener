@@ -3,20 +3,23 @@ package project;
 import java.util.Arrays;
 
 public enum ProjectType {
-    VSCODE("VS Code", "code"),
-    INTELLIJ("IntelliJ", "idea"),
-    UNKNOWN("Unknown", "unknown");
+    VSCODE("VS Code", "code", "vscode"),
+    INTELLIJ("IntelliJ", "idea", "intellij"),
+    UNKNOWN("Unknown", "unknown", "unknown");
 
     private final String command;
     private final String displayName;
-    ProjectType(String displayName, String command) {
+    private final String internalName;
+    ProjectType(String displayName, String command, String internalName) {
         this.command = command;
         this.displayName = displayName;
+        this.internalName = internalName;
     }
     @Override
     public String toString() {return displayName;}
     public String toCommand() {return command;}
     public String toDisplayName() {return displayName;}
+    public String toInternalName() {return internalName;}
     public static ProjectType fromString(String type) {
         return switch (type.toLowerCase()) {
             case "vscode" -> ProjectType.VSCODE;

@@ -17,6 +17,11 @@ public class DebugDecoratorProject implements Project {
     }
 
     @Override
+    public void setType(ProjectType type) {
+        project.setType(type);
+    }
+
+    @Override
     public String toString() {
         return getName() + "|" + getType();
     }

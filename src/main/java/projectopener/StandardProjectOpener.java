@@ -9,6 +9,7 @@ import file.OnlyDirectoriesFileFilter;
 import file.StandardFileHandler;
 import initiator.ProjectInitiator;
 import initiator.TypeBasedProjectInitiator;
+import initiator.TypeOrAskBasedProjectInitiator;
 import input.background.BackgroundInputHandler;
 import input.background.StandardBackgroundInputHandler;
 import project.Project;
@@ -42,10 +43,10 @@ public class StandardProjectOpener {
         ui = new StandardSearchUI(this::onSearchCommand);
         bgInputHandler = new StandardBackgroundInputHandler(this::onOpenCommand, this::onCloseCommand, this::onConfirmSearchCommand, this::onUpCommand, this::onDownCommand);
         fileHandler = new StandardFileHandler(path, new OnlyDirectoriesFileFilter());
-        projectInitiator = new TypeBasedProjectInitiator(path);
         projectTypeDatabase = new CSVProjectTypeDatabase(path);
         projectFactory = new DebugDecoratorProjectFactory(new DBProjectFactory(projectTypeDatabase));
         projectTypeDialog = new DropdownProjectTypeDialog();
+        projectInitiator = new TypeOrAskBasedProjectInitiator(path, projectTypeDialog, projectTypeDatabase);
 
         List<String> projectNames = fileHandler.getProjectNames();
         List<Project> projects = projectFactory.createProjects(projectNames);
@@ -87,8 +88,10 @@ public class StandardProjectOpener {
             ui.hide();
             Project selectedProject = ui.getSelectedProject();
             System.out.println(selectedProject);
-            projectInitiator.openProject(selectedProject);
-            ui.reset();
+            boolean succes = projectInitiator.openProject(selectedProject);
+            if (succes) {
+                ui.reset();
+            }
         }
     }
 

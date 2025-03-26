@@ -1,5 +1,6 @@
 package initiator;
 
+import db.ProjectTypeDatabase;
 import project.Project;
 import project.ProjectType;
 import ui.ProjectTypeDialog;
@@ -9,19 +10,23 @@ import java.io.IOException;
 public class TypeOrAskBasedProjectInitiator implements ProjectInitiator {
     private final String directoryPath;
     private final ProjectTypeDialog dialog;
-    public TypeOrAskBasedProjectInitiator(String directoryPath, ProjectTypeDialog dialog) {
+    private ProjectTypeDatabase db;
+    public TypeOrAskBasedProjectInitiator(String directoryPath, ProjectTypeDialog dialog, ProjectTypeDatabase db) {
         this.directoryPath  = directoryPath;
         this.dialog = dialog;
+        this.db = db;
     }
     @Override
-    public void openProject(Project project) {
+    public boolean openProject(Project project) {
         ProjectType projectType = project.getType();
         if (projectType == ProjectType.UNKNOWN) {
             projectType = dialog.ask();
+            if (projectType == null) { // Probably because you cancelled the dialog
+                return false;
+            }
+            db.put(project.getName(), projectType);
+            project.setType(projectType);
         }
-        // TODO: FORTSÆT HER! Lav denne funktion om til boolean og returner true, hvis det lykkes at åbne,
-        // TODO: og returner false, hvis man canceller eller der opstår fejl.
-        // TODO: HUSK OGSÅ AT TILFØJE DET TIL DATABASEN!
         try {
             boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");
             ProcessBuilder builder;
@@ -33,8 +38,10 @@ public class TypeOrAskBasedProjectInitiator implements ProjectInitiator {
             }
             System.out.println(command);
             Process process = builder.start();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
     }

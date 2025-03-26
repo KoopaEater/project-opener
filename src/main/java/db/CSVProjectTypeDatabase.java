@@ -2,10 +2,7 @@ package db;
 
 import project.ProjectType;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +42,14 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
     }
     @Override
     public boolean put(String projectName, ProjectType projectType) {
-        return false;
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))) {
+            bw.newLine();
+            bw.write(projectName + "," + projectType.toInternalName());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

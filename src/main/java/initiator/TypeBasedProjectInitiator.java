@@ -10,7 +10,7 @@ public class TypeBasedProjectInitiator implements ProjectInitiator {
         this.directoryPath  = directoryPath;
     }
     @Override
-    public void openProject(Project project) {
+    public boolean openProject(Project project) {
         try {
             boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");
             ProcessBuilder builder;
@@ -22,8 +22,10 @@ public class TypeBasedProjectInitiator implements ProjectInitiator {
             }
             System.out.println(command);
             Process process = builder.start();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
     }
