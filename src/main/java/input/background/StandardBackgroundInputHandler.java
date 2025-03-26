@@ -4,9 +4,10 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 public class StandardBackgroundInputHandler implements BackgroundInputHandler {
 
-    BackgroundCommand openCommand, closeCommand, onConfirmSearchCommand, onUpCommand, onDownCommand, onDeleteSearchCommand;
+    BackgroundCommand openCommand, closeCommand, onUpCommand, onDownCommand, onDeleteSearchCommand;
+    SpecialBackgroundCommand onConfirmSearchCommand;
 
-    public StandardBackgroundInputHandler(BackgroundCommand onOpenCommand, BackgroundCommand onCloseCommand, BackgroundCommand onConfirmSearchCommand, BackgroundCommand onUpCommand, BackgroundCommand onDownCommand) {
+    public StandardBackgroundInputHandler(BackgroundCommand onOpenCommand, BackgroundCommand onCloseCommand, SpecialBackgroundCommand onConfirmSearchCommand, BackgroundCommand onUpCommand, BackgroundCommand onDownCommand) {
         this.openCommand = onOpenCommand;
         this.closeCommand = onCloseCommand;
         this.onConfirmSearchCommand = onConfirmSearchCommand;
@@ -18,13 +19,17 @@ public class StandardBackgroundInputHandler implements BackgroundInputHandler {
         int modifier = e.getModifiers();
         return modifier == (NativeKeyEvent.CTRL_L_MASK | NativeKeyEvent.SHIFT_L_MASK);
     }
+    private boolean isCtrlPressed(NativeKeyEvent e) {
+        int modifier = e.getModifiers();
+        return modifier == (NativeKeyEvent.CTRL_L_MASK);
+    }
 
     public void nativeKeyReleased(NativeKeyEvent e) {
         if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
             closeCommand.trigger();
         }
         if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) {
-            onConfirmSearchCommand.trigger();
+            onConfirmSearchCommand.trigger(isCtrlPressed(e));
         }
     }
 

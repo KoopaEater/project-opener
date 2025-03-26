@@ -83,12 +83,12 @@ public class StandardProjectOpener {
         }
     }
 
-    private void onConfirmSearchCommand() {
+    private void onConfirmSearchCommand(boolean special) {
         if (ui.isShown()) {
             ui.hide();
             Project selectedProject = ui.getSelectedProject();
             System.out.println(selectedProject);
-            boolean succes = projectInitiator.openProject(selectedProject);
+            boolean succes = projectInitiator.openProject(selectedProject, special);
             if (succes) {
                 ui.reset();
             }

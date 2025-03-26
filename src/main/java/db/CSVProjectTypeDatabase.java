@@ -40,8 +40,7 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
             throw new RuntimeException(e);
         }
     }
-    @Override
-    public boolean put(String projectName, ProjectType projectType) {
+    private boolean appendToDB(String projectName, ProjectType projectType) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))) {
             bw.newLine();
             bw.write(projectName + "," + projectType.toInternalName());
@@ -49,6 +48,18 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+    private boolean changeTypeInDB(String projectName, ProjectType projectType) {
+        // TODO: Implement
+        return false;
+    }
+    @Override
+    public boolean put(String projectName, ProjectType projectType) {
+        if (typeMap.containsKey(projectName)) {
+            return changeTypeInDB(projectName, projectType);
+        } else {
+            return appendToDB(projectName, projectType);
         }
     }
 

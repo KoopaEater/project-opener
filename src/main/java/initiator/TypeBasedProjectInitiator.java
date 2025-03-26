@@ -10,7 +10,7 @@ public class TypeBasedProjectInitiator implements ProjectInitiator {
         this.directoryPath  = directoryPath;
     }
     @Override
-    public boolean openProject(Project project) {
+    public boolean openProject(Project project, boolean special) {
         try {
             boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");
             ProcessBuilder builder;

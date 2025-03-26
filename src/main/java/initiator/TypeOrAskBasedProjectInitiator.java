@@ -17,9 +17,10 @@ public class TypeOrAskBasedProjectInitiator implements ProjectInitiator {
         this.db = db;
     }
     @Override
-    public boolean openProject(Project project) {
+    public boolean openProject(Project project, boolean special) {
+        System.out.println(special);
         ProjectType projectType = project.getType();
-        if (projectType == ProjectType.UNKNOWN) {
+        if (projectType == ProjectType.UNKNOWN || special) {
             projectType = dialog.ask();
             if (projectType == null) { // Probably because you cancelled the dialog
                 return false;
