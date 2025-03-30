@@ -44,13 +44,13 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
     }
     private boolean appendToDB(String projectName, ProjectType projectType) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, true))) {
-            writer.newLine();
             writer.write(projectName + "," + projectType.toInternalName());
-            return true;
+            writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+        return true;
     }
     private boolean changeTypeInDB(String projectName, ProjectType projectType) {
         List<String> lines  = new ArrayList<>();
@@ -66,7 +66,7 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
             e.printStackTrace();
             return false;
         }
-        try ( BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+        try ( BufferedWriter writer = new BufferedWriter(new FileWriter(path, false))) {
             for (String line : lines) {
                 writer.write(line);
                 writer.newLine();
@@ -75,16 +75,13 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
             e.printStackTrace();
             return false;
         }
-        typeMap.put(projectName, projectType);
         return true;
     }
     @Override
     public boolean put(String projectName, ProjectType projectType) {
-        if (typeMap.containsKey(projectName)) {
-            return changeTypeInDB(projectName, projectType);
-        } else {
-            return appendToDB(projectName, projectType);
-        }
+        boolean status = typeMap.containsKey(projectName) ? changeTypeInDB(projectName, projectType) : appendToDB(projectName, projectType);
+        typeMap.put(projectName, projectType);
+        return status;
     }
 
     @Override
