@@ -23,11 +23,12 @@ public enum ProjectType {
     public String toDisplayName() {return displayName;}
     public String toInternalName() {return internalName;}
     public static ProjectType fromString(String type) {
-        return switch (type.toLowerCase()) {
-            case "vscode" -> ProjectType.VSCODE;
-            case "intellij" -> ProjectType.INTELLIJ;
-            default -> ProjectType.UNKNOWN;
-        };
+        for (ProjectType pt : getAll()) {
+            if (type.equalsIgnoreCase(pt.internalName)) {
+                return pt;
+            }
+        }
+        return UNKNOWN;
     }
     public static ProjectType[] getAll() {
         ProjectType[] values = values();
