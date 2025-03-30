@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
+    private final String SEPPERATOR = ";";
     private final String path;
     private final Map<String, ProjectType> typeMap;
     public CSVProjectTypeDatabase(String directoryPath) {
@@ -32,7 +33,7 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] cells = line.split(",");
+                String[] cells = line.split(SEPPERATOR);
                 String projectName = cells[0];
                 ProjectType projectType = ProjectType.fromString(cells[1]);
                 typeMap.put(projectName, projectType);
@@ -43,7 +44,7 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
     }
     private boolean appendToDB(String projectName, ProjectType projectType) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, true))) {
-            writer.write(projectName + "," + projectType.toInternalName());
+            writer.write(projectName + SEPPERATOR + projectType.toInternalName());
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,8 +57,8 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith(projectName + ",")) {
-                    line = projectName + "," + projectType.toInternalName();
+                if (line.startsWith(projectName + SEPPERATOR)) {
+                    line = projectName + SEPPERATOR + projectType.toInternalName();
                 }
                 lines.add(line);
             }
