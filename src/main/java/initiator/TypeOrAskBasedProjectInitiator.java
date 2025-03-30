@@ -18,7 +18,6 @@ public class TypeOrAskBasedProjectInitiator implements ProjectInitiator {
     }
     @Override
     public boolean openProject(Project project, boolean special) {
-        System.out.println(special);
         ProjectType projectType = project.getType();
         if (projectType == ProjectType.UNKNOWN || special) {
             projectType = dialog.ask();
@@ -37,7 +36,6 @@ public class TypeOrAskBasedProjectInitiator implements ProjectInitiator {
             } else {
                 throw new RuntimeException("Not implemented for this OS");
             }
-            System.out.println(command);
             Process process = builder.start();
             return true;
         } catch (IOException e) {

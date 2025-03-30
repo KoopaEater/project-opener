@@ -20,7 +20,6 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
         File dbFile = new File(path);
         createFileIfNeeded(dbFile);
         loadIntoMap(dbFile);
-        System.out.println(typeMap);
     }
     private void createFileIfNeeded(File file) {
         try {

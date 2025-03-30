@@ -20,7 +20,6 @@ public class TypeBasedProjectInitiator implements ProjectInitiator {
             } else {
                 throw new RuntimeException("Not implemented for this OS");
             }
-            System.out.println(command);
             Process process = builder.start();
             return true;
         } catch (IOException e) {

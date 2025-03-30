@@ -87,7 +87,6 @@ public class StandardProjectOpener {
         if (ui.isShown()) {
             ui.hide();
             Project selectedProject = ui.getSelectedProject();
-            System.out.println(selectedProject);
             boolean succes = projectInitiator.openProject(selectedProject, special);
             if (succes) {
                 ui.reset();
