@@ -3,7 +3,9 @@ package db;
 import project.ProjectType;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
@@ -28,9 +30,9 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
         }
     }
     private void loadIntoMap(File file) {
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 String[] cells = line.split(",");
                 String projectName = cells[0];
                 ProjectType projectType = ProjectType.fromString(cells[1]);
@@ -41,9 +43,9 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
         }
     }
     private boolean appendToDB(String projectName, ProjectType projectType) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))) {
-            bw.newLine();
-            bw.write(projectName + "," + projectType.toInternalName());
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, true))) {
+            writer.newLine();
+            writer.write(projectName + "," + projectType.toInternalName());
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,8 +53,30 @@ public class CSVProjectTypeDatabase implements ProjectTypeDatabase {
         }
     }
     private boolean changeTypeInDB(String projectName, ProjectType projectType) {
-        // TODO: Implement
-        return false;
+        List<String> lines  = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith(projectName + ",")) {
+                    line = projectName + "," + projectType.toInternalName();
+                }
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        try ( BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        typeMap.put(projectName, projectType);
+        return true;
     }
     @Override
     public boolean put(String projectName, ProjectType projectType) {
