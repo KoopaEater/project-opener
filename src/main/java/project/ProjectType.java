@@ -5,6 +5,8 @@ import java.util.Arrays;
 public enum ProjectType {
     VSCODE("VS Code", "code", "vscode"),
     INTELLIJ("IntelliJ", "idea", "intellij"),
+    PYCHARM("PyCharm", "pycharm", "pycharm"),
+    CLION("CLion", "clion", "clion"),
     UNKNOWN("Unknown", "unknown", "unknown");
 
     private final String command;
