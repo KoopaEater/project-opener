@@ -7,6 +7,7 @@ public enum ProjectType {
     INTELLIJ("IntelliJ", "idea", "intellij"),
     PYCHARM("PyCharm", "pycharm", "pycharm"),
     CLION("CLion", "clion", "clion"),
+    WEBSTORM("WebStorm", "wstorm", "webstorm"),
     UNKNOWN("Unknown", "unknown", "unknown");
 
     private final String command;
